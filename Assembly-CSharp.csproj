@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{ED558555-7CFE-1154-77C4-81942055D01A}</ProjectGuid>
+    <ProjectGuid>{858B88FA-629E-E63F-2547-162843A696CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Player\CameraForPlayer.cs" />
     <Compile Include="Assets\Scripts\Player\CheckCollision.cs" />
     <Compile Include="Assets\Scripts\Player\Controller.cs" />
+    <Compile Include="Assets\Scripts\Pool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -7,6 +7,7 @@ public class Controller : MonoBehaviour
     private Vector3 _startPosLR;
     private Vector3 _endPosLR;
     private Vector3 _moveDir;
+    private Vector3 _currentVector;
 
     private Rigidbody _rb;
     private Camera _camera;
@@ -53,6 +54,7 @@ public class Controller : MonoBehaviour
 
             _rb.velocity = -_moveDir * _powerDirection / 2;
         }
+        //transform.Translate(-_moveDir * Time.deltaTime);
     }
 
     private void CalculationRoute()

@@ -1,17 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CheckCollision : MonoBehaviour
 {
-    [SerializeField] private GameObject _dustParticle;
+    [SerializeField] private Pool _poolDust;
 
     #region Callbacks
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Wall")
         {
-            Instantiate(_dustParticle, collision.contacts[0].point, Quaternion.identity);
+            _poolDust.GetFreeElement(collision.contacts[0].point, Quaternion.identity);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.TryGetComponent<Money>(out Money money))
+        {
+            money.SelectionCoins();
         }
     }
     #endregion

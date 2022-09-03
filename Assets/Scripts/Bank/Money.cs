@@ -5,7 +5,9 @@ public class Money : MonoBehaviour
 {
     [SerializeField] private int _amountCoins;
     [SerializeField] private GameObject _particleAfterSelection;
+
     private Animator _animator;
+    private float _rotation = 0;
 
     #region Mono
     private void OnValidate()
@@ -21,15 +23,29 @@ public class Money : MonoBehaviour
 
     #endregion
 
-    #region Callbacks
-    private void OnTriggerEnter(Collider other)
+    #region CallBacks
+
+    private void Update()
     {
-        if (other.gameObject.GetComponent<Controller>() != null)
-        {
-            Bank.AddCoins(_amountCoins);
-            _animator.SetBool("DisableCoin", true);
-        }
+        if (_rotation >= 360)
+            _rotation = 0;
+        else
+            _rotation += Time.deltaTime * 100;
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, _rotation, 0), Time.deltaTime);
     }
+
+    #endregion
+
+    #region Public Method
+
+    public void SelectionCoins()
+    {
+        Bank.AddCoins(_amountCoins);
+        _animator.enabled = true;
+        _animator.SetBool("DisableCoin", true);
+    }
+
     #endregion
 
     #region Private Method
