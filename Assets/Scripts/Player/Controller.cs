@@ -54,7 +54,6 @@ public class Controller : MonoBehaviour
 
             _rb.velocity = -_moveDir * _powerDirection / 2;
         }
-        //transform.Translate(-_moveDir * Time.deltaTime);
     }
 
     private void CalculationRoute()

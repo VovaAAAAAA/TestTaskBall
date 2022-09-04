@@ -44,7 +44,7 @@ public class Pool : MonoBehaviour
 
     private GameObject CreateElement(bool isActiveBuDefault = false)
     {
-        var createdObj = Instantiate(_prefab, _container.transform.position, Quaternion.identity);
+        var createdObj = Instantiate(_prefab, _container.transform.position, Quaternion.identity, _container);
         createdObj.gameObject.SetActive(isActiveBuDefault);
 
         _pools.Add(createdObj);
