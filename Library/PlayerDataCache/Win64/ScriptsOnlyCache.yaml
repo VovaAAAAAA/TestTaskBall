@@ -583,4 +583,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainScene.unity
-  playerPath: D:/testWork/TestTask.exe
+  playerPath: D:/TestTask2/TestTask.exe

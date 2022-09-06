@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody), typeof(CheckCollision))]
 public class Controller : MonoBehaviour
 {
     private Vector3 _positionMouse;
     private Vector3 _startPosLR;
     private Vector3 _endPosLR;
     private Vector3 _moveDir;
-    private Vector3 _currentVector;
+    public Vector3 MoveDir 
+    { 
+        get { return _moveDir; } set {_moveDir = Vector3.ClampMagnitude(value, 12); } 
+    }
 
-    private Rigidbody _rb;
     private Camera _camera;
     private float _powerDirection;
     
@@ -23,7 +25,6 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>();
         _camera = Camera.main;
         _lineRenderer.positionCount = 2;
     }
@@ -33,11 +34,12 @@ public class Controller : MonoBehaviour
     #region Callbacks
     private void Update()
     {
+        RotateBall();
+
         CalculationRoute();
 
         PushBall();
 
-        _rb.angularVelocity = Vector3.Cross(-_rb.velocity * 1.5f, Vector3.up);
     }
 
     #endregion
@@ -49,10 +51,19 @@ public class Controller : MonoBehaviour
         {
             _lineRenderer.SetPosition(0, Vector3.zero);
             _lineRenderer.SetPosition(1, Vector3.zero);
-            if (_powerDirection > 5)
-                _powerDirection = 5;
+        }
 
-            _rb.velocity = -_moveDir * _powerDirection / 2;
+        _moveDir.y = 0;
+
+        if (_powerDirection > 0)
+        {
+            _powerDirection -= Time.fixedDeltaTime;
+            transform.Translate(-_moveDir * _powerDirection * Time.deltaTime, Space.World);
+
+        }
+        else
+        {
+            _powerDirection = 0;
         }
     }
 
@@ -64,15 +75,22 @@ public class Controller : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, _layerMask))
             {
-                _positionMouse = new Vector3(hit.point.x, 1, hit.point.z);
+                _positionMouse = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-                _moveDir = _positionMouse - this.gameObject.transform.position;
-                Vector3 endPosLineRenderer = -_moveDir + this.gameObject.transform.position;
+                Vector3 moveDir = _positionMouse - this.gameObject.transform.position;
+                Vector3 endPosLineRenderer = -moveDir + this.gameObject.transform.position;
 
-                _powerDirection = (_positionMouse - transform.position).magnitude;
 
                 DrawLine(endPosLineRenderer);
             }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            _moveDir = _positionMouse - this.gameObject.transform.position;
+            _powerDirection = (_positionMouse - transform.position).magnitude;
+
+            _moveDir = Vector3.ClampMagnitude(_moveDir, 12);
+            _powerDirection = Mathf.Clamp(_powerDirection, 0, 3);
         }
     }
 
@@ -85,6 +103,12 @@ public class Controller : MonoBehaviour
         _endPosLR = endPosLineRenderer;
         _endPosLR.y = 0;
         _lineRenderer.SetPosition(1, _endPosLR);
+    }
+
+    private void RotateBall()
+    {
+        if (_powerDirection > 0)
+            transform.RotateAround(transform.position, Vector3.Cross(_moveDir, Vector3.up), _powerDirection);
     }
     #endregion
 }
